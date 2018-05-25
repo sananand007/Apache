@@ -75,3 +75,43 @@ Found 2 items
 -rw-r--r--   1 root supergroup          0 2018-04-12 16:37 jobOutput/_SUCCESS
 -rw-r--r--   1 root supergroup       2296 2018-04-12 16:37 jobOutput/part-00000
 ```
+
+
+## Spark-Using sc.parralelize()
+
+```
+Compute the sum of a list and the length of that list. Return the result in a pair of (sum, length)
+
+1st Partition res = (3,2)
+
+local_res = (0,0) , list partition = [3,4]
+0+3 = 3 (sum)
+0+1 = 1 (length)
+
+local_res = (3,1)
+3+4 = 7
+1+1 = 2
+
+2nd Partition res = (7,2)
+
+combOp:(10, 4)
+
+
+list_ = [i for i in range(20)]
+rddtest=sc.parallelize(list_,10) # 2 partition of 10 values each
+
+initialval_zeros=(0,0) #local result that is changing
+partition1=[1,2,3,4,5,6,7,8,9,10] #list items
+seqOp2=lambda local_res, list_item:((local_res[0]+list_item)/local_res[1]+1, local_res[1]+1) #(sum, counter for length)
+combOp2=lambda local_res1, local_res2:
+
+#### 1st partition: [1,2]
+Avg	counter 	local_res
+(0+1)/1    1	 	[1,1]
+(1+2)/2	   2		[3/2,2]
+
+##### 2nd partition: [3,4]
+Avg	counter		local_res
+(0+3)/1  1		[3,1]
+(3+4)/2  2		[7/2,2]
+```
